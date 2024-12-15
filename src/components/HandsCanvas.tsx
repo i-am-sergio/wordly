@@ -83,17 +83,37 @@ const HandsCanvas: React.FC = () => {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(device => device.kind === 'videoinput');
     
-        // Intentar obtener acceso a la cámara delantera, si está disponible
+        // Imprimir el número de cámaras detectadas y sus propiedades
+        console.log(`Número de cámaras detectadas: ${videoDevices.length}`);
+        videoDevices.forEach((device, index) => {
+          console.log(`Cámara ${index + 1}:`);
+          console.log(`  - ID: ${device.deviceId}`);
+          console.log(`  - Nombre: ${device.label}`);
+          console.log(`  - Tipo: ${device.kind}`);
+        });
+
+        // alert(`Número de cámaras detectadas: ${videoDevices.length}`);
+        // videoDevices.forEach((device, index) => {
+        //   alert(`Cámara ${index + 1}:\nID: ${device.deviceId}\nNombre: ${device.label}\nTipo: ${device.kind}`);
+        // });
+    
+        // Intentar obtener acceso a la cámara trasera primero, si está disponible
         let videoDeviceId = null;
     
-        // Primero, intentar con la cámara delantera (facingMode: 'user')
-        const frontCamera = videoDevices.find(device => device.label.toLowerCase().includes('front'));
-        if (frontCamera) {
-          videoDeviceId = frontCamera.deviceId;
+        // Primero, intentar con la cámara trasera (buscando la cámara que no tenga 'front' en su label)
+        const rearCamera = videoDevices.find(device => !device.label.toLowerCase().includes('front'));
+        if (rearCamera) {
+          videoDeviceId = rearCamera.deviceId;
         } else {
-          // Si no se encuentra cámara delantera, intentar con la primera cámara disponible
-          if (videoDevices.length > 0) {
-            videoDeviceId = videoDevices[0].deviceId;
+          // Si no se encuentra cámara trasera, intentar con la cámara delantera (facingMode: 'user')
+          const frontCamera = videoDevices.find(device => device.label.toLowerCase().includes('front'));
+          if (frontCamera) {
+            videoDeviceId = frontCamera.deviceId;
+          } else {
+            // Si no se encuentra ninguna cámara, intentar con la primera cámara disponible
+            if (videoDevices.length > 0) {
+              videoDeviceId = videoDevices[0].deviceId;
+            }
           }
         }
     

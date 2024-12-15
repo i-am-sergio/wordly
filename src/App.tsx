@@ -1,6 +1,6 @@
 import './App.css'
-// import Camera from './components/Camera'
 import HandsCanvas from './components/HandsCanvas'
+import ObjectDetection from './components/ObjectDetection'
 
 function App() {
 
@@ -10,8 +10,8 @@ function App() {
           backgroundColor: '#000',
         }}
       >
-        <HandsCanvas />
-        {/* <Camera /> */}
+        {/* <HandsCanvas /> */} {/* Camera + Hands detection */}
+        <ObjectDetection /> {/* Camera + Object detection */}
       </div>
   )
 }
